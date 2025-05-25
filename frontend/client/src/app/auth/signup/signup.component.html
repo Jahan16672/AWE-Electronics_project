@@ -1,0 +1,39 @@
+<div class="signup-container">
+  <h2>Create an Account</h2>
+  <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+    <label>Name</label>
+    <input formControlName="name" type="text" placeholder="Enter your name" />
+    <div *ngIf="signupForm.get('name')?.invalid && signupForm.get('name')?.touched">
+    <small *ngIf="signupForm.get('name')?.errors?.['pattern']">
+        Name must be at least 2 letters and contain no numbers.
+    </small>
+    </div>
+
+    <label>Email</label>
+    <input formControlName="email" type="email" placeholder="Enter your email" />
+    <div *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched">
+      <small *ngIf="signupForm.get('email')?.errors?.['email']">Enter a valid email.</small>
+    </div>
+
+    <label>Password</label>
+    <input formControlName="password" type="password" placeholder="Enter your password" />
+    <small>Password must be at least 6 characters long and include 1 letter and 1 number.</small>
+    <div *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched">
+      <small *ngIf="signupForm.get('password')?.errors?.['pattern']">Password does not meet complexity requirements.</small>
+    </div>
+
+    <label>Repeat Password</label>
+    <input formControlName="confirmPassword" type="password" placeholder="Repeat your password" />
+    <div *ngIf="signupForm.hasError('passwordMismatch') && signupForm.get('confirmPassword')?.touched">
+      <small>Passwords do not match.</small>
+    </div>
+
+    <label>Role</label>
+    <select formControlName="role">
+      <option value="customer">Customer</option>
+      <option value="staff">Staff</option>
+    </select>
+
+    <button type="submit" [disabled]="signupForm.invalid">Sign Up</button>
+  </form>
+</div>

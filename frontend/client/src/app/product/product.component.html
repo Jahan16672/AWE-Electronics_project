@@ -1,1 +1,19 @@
-<p>product works!</p>
+<div class="container">
+  <h2>Product List</h2>
+
+  <input
+  type="text"
+  [(ngModel)]="searchTerm"
+  placeholder="Search products..."
+  />
+
+  <div *ngIf="filteredProducts.length === 0">No products found.</div>
+
+  <ul class="product-list">
+    <li *ngFor="let product of filteredProducts">
+      <strong>{{ product.name }}</strong><br />
+      Price: ${{ product.price }}<br />
+      Stock: {{ product.stock }}
+    </li>
+  </ul>
+</div>

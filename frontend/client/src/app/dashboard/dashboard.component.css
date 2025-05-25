@@ -1,0 +1,45 @@
+.dashboard-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.dashboard-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 140px;
+  height: 140px;
+  background-color: #f0f0f0;
+  border-radius: 12px;  /* small rounded corners */
+  text-decoration: none;
+  color: #333;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.dashboard-btn:hover {
+  background-color: #cce4ff; /* highlight background on hover */
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4);
+  color: #004085;  /* darker text on hover */
+}
+
+button.dashboard-btn {
+  border: none;
+}
+
+.dashboard-wrapper {
+  display: flex;
+  flex-direction: column;    /* stack vertically */
+  justify-content: center;   /* vertical centre */
+  align-items: center;       /* horizontal centre */
+  height: 60vh;             /* full viewport height */
+  text-align: center;        /* center text inside */
+}

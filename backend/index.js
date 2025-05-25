@@ -10,7 +10,10 @@ const app = express();
 const PORT = 3000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:4200', // Angular frontend
+  credentials: true
+}));
 app.use(express.json());
 
 // Basic Route
