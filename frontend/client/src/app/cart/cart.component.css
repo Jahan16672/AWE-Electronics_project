@@ -1,0 +1,25 @@
+.cart-wrapper {
+  padding: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th, td {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+button {
+  margin-right: 0.5rem;
+}
+
+.stock-warning {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 4px;
+}

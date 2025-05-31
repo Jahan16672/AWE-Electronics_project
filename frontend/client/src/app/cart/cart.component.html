@@ -1,1 +1,46 @@
-<p>cart works!</p>
+<div class="cart-wrapper" *ngIf="!loading">
+  <h2>Your Cart</h2>
+  <div *ngIf="cartItems.length === 0">
+    <p>Your cart is empty.</p>
+  </div>
+  <div *ngIf="cartItems.length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Total</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of cartItems">
+          <td>{{ item.name }}</td>
+          <td>
+            <button (click)="decreaseQuantity(item.product_id)">-</button>
+            {{ item.quantity }}
+            <button 
+              (click)="addQuantity(item.product_id)" 
+              [disabled]="item.quantity >= item.stock"
+            >
+              +
+            </button>
+            <div class="stock-warning" *ngIf="item.quantity >= item.stock">
+              Max stock reached
+            </div>
+          </td>
+          <td>{{ item.price | currency:'AUD' }}</td>
+          <td>{{ item.quantity * item.price | currency:'AUD' }}</td>
+          <td>
+            <button (click)="removeItem(item.product_id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button (click)="checkout()">Checkout</button>
+  </div>
+</div>
+
+
+

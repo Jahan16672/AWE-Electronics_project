@@ -30,9 +30,9 @@ export class ProductService {
     );
   }
 
-  addProduct(product: Product): Observable<any> {
-    return this.http.post(this.apiUrl, product);
-  }
+  addProduct(product: Product & { user_id: number }) {
+  return this.http.post(this.apiUrl, product);
+}
 
   updateProduct(id: string, product: Product): Observable<any> {
     const userId = this.authService.currentUser.id;

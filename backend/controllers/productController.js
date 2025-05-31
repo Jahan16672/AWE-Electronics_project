@@ -71,7 +71,10 @@ const updateProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
   const { id } = req.params;
   try {
+    await db.query("DELETE FROM cart_items WHERE product_id = $1", [id]);
+    
     const result = await db.query("DELETE FROM products WHERE id = $1 RETURNING *", [id]);
+
     if (result.rows.length === 0) {
       return res.status(404).json({ success: false, message: "Product not found" });
     }
@@ -81,6 +84,7 @@ const deleteProduct = async (req, res) => {
     res.status(500).json({ success: false, message: "Error deleting product" });
   }
 };
+
 
 module.exports = {
   getAllProducts,

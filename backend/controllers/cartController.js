@@ -4,22 +4,26 @@ const db = require("../db/db");
 const addToCart = async (req, res) => {
   const { user_id, product_id, quantity } = req.body;
   try {
-    const product = await db.query("SELECT price FROM products WHERE id = $1", [
-      product_id,
-    ]);
+    // Get product price and stock
+    const product = await db.query(
+      "SELECT price, stock FROM products WHERE id = $1",
+      [product_id]
+    );
+
     if (product.rows.length === 0) {
       return res
         .status(404)
         .json({ success: false, message: "Product not found" });
     }
 
-    const price = product.rows[0].price;
+    const { price, stock } = product.rows[0];
 
+    // Get or create cart
     const cart = await db.query(
       "SELECT id FROM shopping_carts WHERE user_id = $1",
       [user_id]
     );
-    let cartId =
+    const cartId =
       cart.rows.length > 0
         ? cart.rows[0].id
         : (
@@ -29,10 +33,36 @@ const addToCart = async (req, res) => {
             )
           ).rows[0].id;
 
-    await db.query(
-      "INSERT INTO cart_items (cart_id, product_id, quantity, price) VALUES ($1, $2, $3, $4)",
-      [cartId, product_id, quantity, price]
+    // Check if item already in cart
+    const existingItem = await db.query(
+      "SELECT quantity FROM cart_items WHERE cart_id = $1 AND product_id = $2",
+      [cartId, product_id]
     );
+
+    const currentQuantity = existingItem.rows.length > 0
+      ? existingItem.rows[0].quantity
+      : 0;
+
+    const newQuantity = currentQuantity + quantity;
+
+    if (newQuantity > stock) {
+      return res.status(400).json({
+        success: false,
+        message: `Only ${stock} in stock. You already have ${currentQuantity} in your cart.`,
+      });
+    }
+
+    if (existingItem.rows.length > 0) {
+      await db.query(
+        "UPDATE cart_items SET quantity = $1 WHERE cart_id = $2 AND product_id = $3",
+        [newQuantity, cartId, product_id]
+      );
+    } else {
+      await db.query(
+        "INSERT INTO cart_items (cart_id, product_id, quantity, price) VALUES ($1, $2, $3, $4)",
+        [cartId, product_id, quantity, price]
+      );
+    }
 
     res.status(201).json({ success: true, message: "Item added to cart" });
   } catch (err) {
@@ -43,16 +73,19 @@ const addToCart = async (req, res) => {
   }
 };
 
+
 // View cart
 const getCart = async (req, res) => {
   const { user_id } = req.query;
   try {
     const result = await db.query(
-      `SELECT ci.product_id, p.name, ci.quantity, ci.price
+      `SELECT ci.product_id, p.name, ci.quantity, ci.price, p.stock
        FROM cart_items ci
        JOIN shopping_carts sc ON ci.cart_id = sc.id
        JOIN products p ON ci.product_id = p.id
-       WHERE sc.user_id = $1`,
+       WHERE sc.user_id = $1
+       ORDER BY ci.id;
+       `,
       [user_id]
     );
     res.json({ success: true, cart: result.rows });

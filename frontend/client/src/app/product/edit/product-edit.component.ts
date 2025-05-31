@@ -56,11 +56,21 @@ export class ProductEditComponent implements OnInit {
     if (this.productForm.invalid) return;
 
     const formValues = this.productForm.value;
-    const productData: Product = {
+    const userId = this.authService.currentUser?.id;
+
+    if (!userId) {
+    alert('User not logged in. Cannot add or update product.');
+    return;
+  }
+    const productData = {
+      user_id: userId,
       name: formValues.name,
       price: formValues.price,
-      stock: formValues.stock,
+      stock: formValues.stock
     };
+
+    console.log('Submitting product:', productData);
+
 
     if (this.isEdit && this.productId) {
       this.productService.updateProduct(this.productId, productData).subscribe(() => {

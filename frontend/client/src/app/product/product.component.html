@@ -15,6 +15,10 @@
   Price: ${{ product.price }}<br />
   Stock: {{ product.stock }}<br />
 
+  <button *ngIf="!isStaff()" (click)="addToCart(product.id!)">
+    Add to Cart
+  </button>
+
   <a *ngIf="isStaff()" [routerLink]="['/product/edit', product.id]">
     <button>Edit</button>
   </a>
