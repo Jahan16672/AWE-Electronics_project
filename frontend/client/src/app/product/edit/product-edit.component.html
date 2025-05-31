@@ -1,0 +1,34 @@
+<h2>{{ isEdit ? 'Edit' : 'Add' }} Product</h2>
+
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+      <label>
+        Name:
+        <input formControlName="name" />
+      </label>
+      <div *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched">
+        Name is required.
+      </div>
+
+      <label>
+        Price:
+        <input formControlName="price" type="number" />
+      </label>
+      <div *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched">
+        Price must be a positive number.
+      </div>
+
+      <label>
+        Stock:
+        <input formControlName="stock" type="number" />
+      </label>
+      <div *ngIf="productForm.get('stock')?.invalid && productForm.get('stock')?.touched">
+        Stock is required and must be 0 or more.
+      </div>
+
+      <button type="submit" [disabled]="productForm.invalid">{{ isEdit ? 'Update' : 'Add' }}</button>
+      <button type="button" (click)="cancel()">Cancel</button>
+    </form>
+
+    <div *ngIf="successMessage" style="color: green; margin-top: 10px;">
+      {{ successMessage }}
+    </div>

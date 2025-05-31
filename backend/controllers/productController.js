@@ -45,8 +45,47 @@ const addProduct = async (req, res) => {
   }
 };
 
+// Update product by ID
+const updateProduct = async (req, res) => {
+  const { id } = req.params;
+  const { name, price, stock } = req.body;
+
+  try {
+    const result = await db.query(
+      "UPDATE products SET name = $1, price = $2, stock = $3 WHERE id = $4 RETURNING *",
+      [name, price, stock, id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ success: false, message: "Product not found" });
+    }
+
+    res.status(200).json({ success: true, product: result.rows[0] });
+  } catch (err) {
+    console.error("Update Product Error:", err);
+    res.status(500).json({ success: false, message: "Error updating product" });
+  }
+};
+
+// Delete product by ID
+const deleteProduct = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await db.query("DELETE FROM products WHERE id = $1 RETURNING *", [id]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ success: false, message: "Product not found" });
+    }
+    res.status(200).json({ success: true, message: "Product deleted" });
+  } catch (err) {
+    console.error("Delete Product Error:", err);
+    res.status(500).json({ success: false, message: "Error deleting product" });
+  }
+};
+
 module.exports = {
   getAllProducts,
   getProductById,
   addProduct,
+  updateProduct,
+  deleteProduct
 };

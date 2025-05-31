@@ -1,7 +1,11 @@
 const db = require("../db/db");
 
 const verifyStaff = async (req, res, next) => {
-  const userId = req.body.user_id || req.query.user_id;
+  // console.log('verifyStaff middleware triggered');
+  // console.log('req.body:', req.body);
+  // console.log('req.query:', req.query);
+  const userId = (req.body && req.body.user_id) || (req.query && req.query.user_id);
+
 
   if (!userId) {
     return res
