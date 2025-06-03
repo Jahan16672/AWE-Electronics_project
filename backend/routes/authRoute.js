@@ -5,7 +5,6 @@ const validateName = require("../middlewares/validateName");
 const validateEmail = require("../middlewares/validateEmail");
 const validatePassword = require("../middlewares/validatePassword");
 
-// 🔐 Signup Route
 router.post(
   "/signup",
   validateName,
@@ -52,7 +51,6 @@ router.post(
   }
 );
 
-// 🔓 Login Route
 router.post("/login", validateEmail, validatePassword, async (req, res) => {
   const { email, password } = req.body;
   try {

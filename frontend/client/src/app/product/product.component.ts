@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../auth/auth.service';
 import { RouterModule } from '@angular/router';
 import { CartService } from '../cart/cart.service';
+import { User, Customer, Staff } from '../user/user.model';
 
 
 @Component({
@@ -18,7 +19,7 @@ import { CartService } from '../cart/cart.service';
 export class ProductComponent implements OnInit {
   products: Product[] = [];
   searchTerm: string = '';
-  userId: string = '';
+  userId: number = 0;
   cartItems: any[] = [];
 
   constructor(
@@ -30,7 +31,7 @@ export class ProductComponent implements OnInit {
   ngOnInit() {
     const currentUser = this.authService.currentUser;
     if (currentUser) {
-      this.userId = currentUser.id.toString();
+      this.userId = currentUser.id;
       // Subscribe to cart items observable
       this.cartService.cartItems$.subscribe(items => {
         this.cartItems = items;
@@ -51,7 +52,13 @@ export class ProductComponent implements OnInit {
   }
 
   isStaff(): boolean {
-    return this.authService.role === 'staff';
+    return this.authService.currentUser instanceof Staff;
+    // return this.authService.role === 'staff';
+  }
+
+  isCustomer(): boolean {
+    return this.authService.currentUser instanceof Customer;
+    // return this.authService.role === 'staff';
   }
 
   loadProducts() {
@@ -66,17 +73,18 @@ export class ProductComponent implements OnInit {
 }
 
   deleteProduct(id: number) {
-    const userId = this.authService.currentUser.id.toString();
-
-    this.productService.deleteProduct(id, userId).subscribe({
-      next: (res) => {
-        console.log('Product deleted', res);
-        this.loadProducts();
-      },
-      error: (err) => {
-        console.error('Delete failed:', err);
-      }
-    });
+    const currentUser = this.authService.currentUser;
+    if (currentUser) {
+      this.productService.deleteProduct(id, currentUser.id).subscribe({
+        next: (res) => {
+          console.log('Product deleted', res);
+          this.loadProducts();
+        },
+        error: (err) => {
+          console.error('Delete failed:', err);
+        }
+      });
+    }
   }
 
   addToCart(productId: number): void {

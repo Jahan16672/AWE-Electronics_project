@@ -35,11 +35,16 @@ export class ProductService {
 }
 
   updateProduct(id: string, product: Product): Observable<any> {
-    const userId = this.authService.currentUser.id;
-    return this.http.put(`${this.apiUrl}/${id}?user_id=${userId}`, product);
+    const currentUser = this.authService.currentUser;
+    if (currentUser) {
+      return this.http.put(`${this.apiUrl}/${id}?user_id=${currentUser.id}`, product);
+    }
+    return new Observable(observer => {
+      observer.error('User not authenticated');
+    });
   }
 
-  deleteProduct(id: number, userId: string) {
+  deleteProduct(id: number, userId: number) {
     return this.http.delete(`${this.apiUrl}/${id}?user_id=${userId}`);
   }
 }

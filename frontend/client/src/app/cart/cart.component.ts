@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 
 export class CartComponent implements OnInit {
   cartItems: any[] = [];
-  userId: string = '';
+  userId: number = 0;
   loading = true;
 
   constructor(private cartService: CartService, private authService: AuthService) {}

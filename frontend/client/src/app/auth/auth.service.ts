@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
+import { User, Customer, Staff } from '../user/user.model';
 
 @Injectable({ providedIn: 'root' }) //decorator makes authservice available globally
 export class AuthService {
@@ -31,11 +32,23 @@ export class AuthService {
     return !!localStorage.getItem('user'); //checks if user is logged in. !! converts value to bool, true if data exists, false if not
   }
 
-  get currentUser() {//retrieves the currently logged-in user from local storage
-    return JSON.parse(localStorage.getItem('user') || '{}'); //parses JSON string back to object. if no user, empty object
+  get currentUser(): User | null {
+    const userString = localStorage.getItem('user');
+    if (userString) {
+      const userData = JSON.parse(userString);
+      // Based on the role, return the appropriate class instance
+      if (userData.role === 'customer') {
+        return new Customer(userData.id, userData.name, userData.email);
+      } else if (userData.role === 'staff') {
+        return new Staff(userData.id, userData.name, userData.email);
+      }
+      // If there's a user but no matching role, or an unknown role, you might return null or a generic User object
+      return userData as User; // Fallback to basic User interface
+    }
+    return null; // No user found
   }
 
-  get role(): string {
-    return this.currentUser?.role || ''; //gets current user role, if no user, returns empty string
+  get role(): 'customer' | 'staff' | 'manager' | '' {
+    return this.currentUser?.role || '';
   }
 }

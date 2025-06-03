@@ -17,13 +17,13 @@ export class CartService {
     this.cartItemsSubject.next(items);
   }
 
-  getCart(userId: string): Observable<any> {
+  getCart(userId: number): Observable<any> {
     return this.http.get<{cart: any[]}>(`${this.apiUrl}?user_id=${userId}`).pipe(
       tap(res => this.updateCartItems(res.cart))
     );
   }
 
-  addToCart(userId: string, productId: number, quantity: number): Observable<any> {
+  addToCart(userId: number, productId: number, quantity: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/add`, {
       user_id: userId,
       product_id: productId,
@@ -36,7 +36,7 @@ export class CartService {
     );
   }
 
-  removeFromCart(userId: string, productId: number): Observable<any> {
+  removeFromCart(userId: number, productId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/remove/${productId}?user_id=${userId}`).pipe(
       tap(() => {
         // Refresh cart after remove
@@ -45,7 +45,7 @@ export class CartService {
     );
   }
 
-  checkout(userId: string): Observable<any> {
+  checkout(userId: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/checkout`, { user_id: userId }).pipe(
       tap(() => this.updateCartItems([])) // Clear cart on checkout
     );
