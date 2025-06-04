@@ -1,0 +1,17 @@
+<div class="dashboard-wrapper">  
+  <h2>Welcome to Dashboard</h2>
+  <p *ngIf="isStaff()">You are logged in as staff.</p>
+  <p *ngIf="isCustomer()">You are logged in as a customer.</p>
+
+  <div class="dashboard-options">
+    <a routerLink="/product" class="dashboard-btn">🛍️ Products</a>
+
+    <a *ngIf="isCustomer()" routerLink="/cart" class="dashboard-btn">🛒 View Cart</a>
+
+    <div *ngIf="isStaff()">
+      <a routerLink="/product/edit" class="dashboard-btn">✏️ Add Products</a>
+    </div>
+  </div>
+
+  <button class="dashboard-btn" (click)="logout()">Logout</button>
+</div>

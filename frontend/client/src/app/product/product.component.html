@@ -1,0 +1,30 @@
+<div class="container">
+  <h2>Product List</h2>
+
+  <input
+    type="text"
+    [(ngModel)]="searchTerm"
+    placeholder="Search products..."
+  />
+
+  <div *ngIf="filteredProducts.length === 0">No products found.</div>
+
+  <ul class="product-list">
+    <li *ngFor="let product of filteredProducts">
+  <strong>{{ product.name }}</strong><br />
+  Price: ${{ product.price }}<br />
+  Stock: {{ product.stock }}<br />
+
+  <button *ngIf="isCustomer()" (click)="addToCart(product.id!)">
+    Add to Cart
+  </button>
+
+  <a *ngIf="isStaff()" [routerLink]="['/product/edit', product.id]">
+    <button>Edit</button>
+  </a>
+
+  <button *ngIf="isStaff()" (click)="deleteProduct(product.id!)">Delete</button>
+
+</li>
+  </ul>
+</div>

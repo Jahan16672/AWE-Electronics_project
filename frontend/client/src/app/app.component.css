@@ -1,0 +1,74 @@
+header {
+  background-color: #ffffff;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+nav {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  padding-top: 25px;
+}
+
+nav a {
+  color: rgb(64, 102, 126);
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  padding: 8px 16px;           /* space inside the button */
+  font-size: 18px;
+  border-radius: 18px;         /* curved corners */
+  background-color: rgba(186, 218, 255, 0.267);  /* light transparent background */
+  display: inline-block;       /* makes padding work better */
+  height: 20px;
+}
+
+nav a:hover {
+    background-color: rgba(230, 250, 255, 0.35);  /* lighter on hover */
+    color: #97cffd;            /* optional: change text colour on hover */
+}
+
+.logo {
+  height: 80px;
+  width: 80px;
+}
+
+.companyName {
+    height: 30px;
+    padding-top: 25px;
+    padding-left: 50px;
+}
+
+.logoPositionHeader {
+    display: flex;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+/* Use flex layout */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Make main content grow to push footer down */
+main {
+  flex: 1;
+}
+
+/* Footer styles */
+footer {
+  background-color: white;
+  text-align: center;
+  padding: 1rem 0;
+  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.15);
+}

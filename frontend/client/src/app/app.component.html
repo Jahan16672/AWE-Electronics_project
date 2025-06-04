@@ -1,0 +1,26 @@
+<body>
+  <div class="page-container">
+    <header>
+      <div class="logoPositionHeader">
+        <img src="assets/awe_electronics_logo.JPG" alt="Logo" class="logo">
+        <img src="assets/awe_electronics_name.JPG" alt="AWE Electronics" class="companyName">
+      </div>
+      <nav>
+        <a routerLink="/">Home</a>
+        <a routerLink="/cart">Cart</a>
+        <a routerLink="/login">Login</a>
+        <a routerLink="/signup">Signup</a>
+        <a routerLink="/product">Product</a>
+        <a routerLink="/dashboard">Dashboard</a>
+      </nav>
+    </header>
+
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+
+    <footer>
+      <p>© 2025 AWE Electronics</p>
+    </footer>
+  </div>
+</body>
