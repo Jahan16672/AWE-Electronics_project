@@ -21,6 +21,9 @@ export class ProductComponent implements OnInit {
   searchTerm: string = '';
   userId: number = 0;
   cartItems: any[] = [];
+  sortField: 'price' | 'stock' | '' = '';
+  sortOrder: 'asc' | 'desc' | '' = '';
+  successMessages: { [productId: number]: string } = {};
 
   constructor(
     private productService: ProductService,
@@ -43,12 +46,6 @@ export class ProductComponent implements OnInit {
     this.productService.getAllProducts().subscribe(data => {
       this.products = data.products;
     });
-  }
-
-  get filteredProducts(): Product[] {
-    return this.products.filter(product =>
-      product.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
   }
 
   isStaff(): boolean {
@@ -100,14 +97,42 @@ export class ProductComponent implements OnInit {
     const currentQuantity = cartItem ? cartItem.quantity : 0;
 
     if (currentQuantity + 1 > product.stock) {
-      alert(`Cannot add more than ${product.stock} items for this product.`);
+      this.successMessages[productId] = `Only ${product.stock} in stock.`;
+      setTimeout(() => delete this.successMessages[productId], 3000);
       return;
     }
 
     this.cartService.addToCart(this.userId, productId, 1).subscribe({
-      next: () => alert('Item added to cart'),
-      error: (err) => console.error('Add to cart failed:', err)
+      next: () => {
+        this.successMessages[productId] = 'Added to cart!';
+        setTimeout(() => delete this.successMessages[productId], 3000);
+      },
+      error: (err) => {
+        console.error('Add to cart failed:', err);
+        this.successMessages[productId] = 'Add failed.';
+        setTimeout(() => delete this.successMessages[productId], 3000);
+      }
     });
-  }  
+  }
+
+   get filteredProducts(): Product[] {
+    let filtered = this.products.filter(product =>
+      product.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+
+    if (this.sortField !== '' && this.sortOrder !== '') {
+      filtered = filtered.sort((a, b) => {
+        const field = this.sortField as 'price' | 'stock';
+
+        const valueA = a[field];
+        const valueB = b[field];
+
+        return this.sortOrder === 'asc' ? valueA - valueB : valueB - valueA;
+      });
+    }
+
+    return filtered;
+  }
+
 }
 

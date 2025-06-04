@@ -7,24 +7,44 @@
     placeholder="Search products..."
   />
 
+  <div class="filters">
+    <label for="sort">Sort by:</label>
+    <select id="sort" [(ngModel)]="sortField">
+      <option value="">-- Select --</option>
+      <option value="price">Price</option>
+      <option value="stock">Stock</option>
+    </select>
+
+    <select [(ngModel)]="sortOrder">
+      <option value="">-- Order --</option>
+      <option value="asc">Ascending</option>
+      <option value="desc">Descending</option>
+    </select>
+  </div>
+
   <div *ngIf="filteredProducts.length === 0">No products found.</div>
 
   <ul class="product-list">
     <li *ngFor="let product of filteredProducts">
-  <strong>{{ product.name }}</strong><br />
-  Price: ${{ product.price }}<br />
-  Stock: {{ product.stock }}<br />
+      <strong>{{ product.name }}</strong><br />
+      Price: ${{ product.price }}<br />
+      Stock: {{ product.stock }}<br />
 
-  <button *ngIf="isCustomer()" (click)="addToCart(product.id!)">
-    Add to Cart
-  </button>
+      <button class="add-to-cart" *ngIf="isCustomer()" (click)="addToCart(product.id!)">
+        Add to Cart
+      </button>
 
-  <a *ngIf="isStaff()" [routerLink]="['/product/edit', product.id]">
-    <button>Edit</button>
-  </a>
+      <span class="success-message" *ngIf="successMessages[product.id!]">
+        {{ successMessages[product.id!] }}
+      </span>
 
-  <button *ngIf="isStaff()" (click)="deleteProduct(product.id!)">Delete</button>
+      <a *ngIf="isStaff()" [routerLink]="['/product/edit', product.id]">
+        <button class="edit-btn">Edit</button>
+      </a>
 
-</li>
+      <button *ngIf="isStaff()" class="delete-btn" (click)="deleteProduct(product.id!)">
+        Delete
+      </button>
+    </li>
   </ul>
 </div>
