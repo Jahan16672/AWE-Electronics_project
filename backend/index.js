@@ -9,10 +9,12 @@ const orderRoutes = require("./routes/orderRoute");
 const app = express();
 const PORT = 3000;
 
-app.use(cors({
-  origin: 'http://localhost:4200', // Angular frontend
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Angular frontend
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 app.get("/", (req, res) => {
