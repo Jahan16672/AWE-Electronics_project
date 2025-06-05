@@ -8,6 +8,8 @@
 
     <a *ngIf="isCustomer()" routerLink="/cart" class="dashboard-btn">🛒 View Cart</a>
 
+    <a *ngIf="isCustomer()" routerLink="/orders" class="dashboard-btn">🛒 View Past Orders</a>
+
     <div *ngIf="isStaff()">
       <a routerLink="/product/edit" class="dashboard-btn">✏️ Add Products</a>
     </div>

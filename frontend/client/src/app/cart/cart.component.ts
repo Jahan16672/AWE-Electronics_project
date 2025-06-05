@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CartService } from './cart.service';
-import { AuthService } from '../auth/auth.service'; // Adjust path as needed
+import { AuthService } from '../auth/auth.service';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
@@ -16,7 +17,7 @@ export class CartComponent implements OnInit {
   userId: number = 0;
   loading = true;
 
-  constructor(private cartService: CartService, private authService: AuthService) {}
+  constructor(private cartService: CartService, private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     const currentUser = this.authService.currentUser;
@@ -47,9 +48,20 @@ export class CartComponent implements OnInit {
     this.cartService.addToCart(this.userId, productId, -1).subscribe();
   }
 
-  checkout(): void {
-    this.cartService.checkout(this.userId).subscribe(() => {
-      alert('Checkout successful!');
+  checkout() {
+    this.cartService.checkout(this.userId).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.router.navigate(['/orders']);
+        }
+      },
+      error: (err) => {
+        console.error('Checkout error', err);
+      }
     });
   }
+
+  getTotalPrice(): number {
+  return this.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+}
 }

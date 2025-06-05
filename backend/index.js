@@ -4,6 +4,7 @@ const pool = require("./db/db"); // ✅ new import for shared DB pool
 const authRoutes = require("./routes/authRoute");
 const productRoutes = require("./routes/productRoute");
 const cartRoutes = require("./routes/cartRoute");
+const orderRoutes = require("./routes/orderRoute");
 
 const app = express();
 const PORT = 3000;
@@ -21,6 +22,7 @@ app.get("/", (req, res) => {
 app.use("/", authRoutes);
 app.use("/", productRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/orders", orderRoutes);
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);

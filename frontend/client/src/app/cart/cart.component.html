@@ -38,6 +38,9 @@
         </tr>
       </tbody>
     </table>
+    <div class="total-row">
+      <strong>Total Price:</strong> {{ getTotalPrice() | currency:'AUD' }}
+    </div>
     <button (click)="checkout()">Checkout</button>
   </div>
 </div>

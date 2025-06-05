@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { SignupService } from './signup.service';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-signup',
@@ -14,7 +16,7 @@ import { SignupService } from './signup.service';
 export class SignupComponent {
   signupForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private signupService: SignupService) {
+  constructor(private fb: FormBuilder, private signupService: SignupService, private router: Router) {
     this.signupForm = this.fb.group({
       name: ['', [Validators.required, Validators.pattern(/^[A-Za-z]{2,}(?: [A-Za-z]{2,})*$/)]],
       email: ['', [Validators.required, Validators.email]],
@@ -25,16 +27,20 @@ export class SignupComponent {
   }
 
   onSubmit() {
-    if (this.signupForm.valid && this.passwordsMatch()) {
-      const { confirmPassword, ...formValue } = this.signupForm.value;
-      this.signupService.signup(formValue).subscribe({
-        next: (res: any) => alert('Signup successful'),
-        error: (err: any) => alert('Signup failed: ' + (err.error?.message || err.message))
-      });
-    } else {
-      alert('Form is invalid or passwords do not match');
-    }
+  if (this.signupForm.valid && this.passwordsMatch()) {
+    const { confirmPassword, ...formValue } = this.signupForm.value;
+    this.signupService.signup(formValue).subscribe({
+      next: (res: any) => {
+        alert('Signup successful');
+        this.router.navigate(['/login']); // 👈 redirect here
+      },
+      error: (err: any) =>
+        alert('Signup failed: ' + (err.error?.message || err.message))
+    });
+  } else {
+    alert('Form is invalid or passwords do not match');
   }
+}
 
   passwordsMatch(): boolean {
     return this.signupForm.value.password === this.signupForm.value.confirmPassword;
